@@ -1,0 +1,468 @@
+                                                                            
+                                                                                                             --------------------------
+                                                                                                               ADVANCE JAVA|
+                                                                                                             ---------------------------
+
+    IMPORTANT QUESTIONS
+   -------------------------------------- 
+1. What is JDBC?
+2.What is JDBC Driver or Driver Software?
+3.Components of JDBC?
+    
+                    INTERFACES IN JDBC :
+                   ----------------------------------
+                     Connection
+                     Statement
+                     Prepared Statement
+                     Callable Statement
+                     Result Set
+
+                    CLASSES IN JDBC:
+                   ----------------------------
+
+                     DriverManager
+                     BLOB / CLOB
+
+4. Steps to connect java with the Database?
+5.What do you mean by statementts and its types?
+6.Difference between Statement and Prepared statement?
+7. What do you mean by DriverManager?
+8.What is the purpose of connection interface?
+9. Explain about Result Statement
+10.Explain about Batch processing?
+11.How many ways we can load or register Driver?
+12.Explain about different types of Execute( ) method?
+
+
+
+
+
+
+
+
+
+  Java.lang package 
+  ------------------------                                                        
+	Java.lang package is implicitly imported to all of the java classes .
+	It is present inside the system library 
+
+   What is JAR file ?
+   ----------------------
+	
+                JAR file consists of bytecode and some necessary files 
+	JAR file is used to transfer the java files 
+	By using this jar file, we can transfer the java code from one package to another package . 
+     
+       Steps to convert the java code into jar file:
+      ------------------------------------------------------
+	Select the java project which code has to be converted to the jar file 
+	Right click  and click the export , a new window will appear on that search the JAR 
+	And select the JAR file under the folder of java 
+	Let it be as it is don’t change anything 
+	And select the place where to store the jar file .  
+
+       Steps to add any jar file into the project (program):
+      -----------------------------------------------------------------
+	Select the project where you want to add the jar file 
+	Right click the selected project ----> click build path ---> click configure build path
+	One window will appear click on the Libraries--------> and select class path.
+	And click on add external jar .
+	And then select the jar file from the system file and open.
+	Finally,the build jar is added inside the project .
+
+       How to connect java with database ?
+       -----------------------------------------------
+         STEPS TO CONNECT JAVA WITH DATABSE:
+        -----------------------------------------------------------------------
+	We want JDBC (Java database connectivity) to connect the java with data base .
+        for this,we have to follow 5 steps :
+
+      1.  Load ( or ) register Driver ----> Driver interface -------->   present inside java.sql.Driver
+      2.  Establish connection-------->     connection interface --------> present inside java.sql.connection
+      3.  Create statements ------>  statement interface -------->   present inside java.sql.connection
+      4.  Execute query    --------->   Result set interface ------->  present inside java.sql.Resultset
+      5.  Close the connection ----------> c.close() in the finally block or the try block
+
+
+     1.Load or Register is done in how many ways ?
+      	we can done in 2 ways 
+
+           1.Implicit 
+          ----------------
+
+                     java.sql.Driver d=new package.mysql.cj.jdbc.Driver();
+
+           2.Explicit
+          ---------------
+	      
+	        Class.forName(“com.mysql.cj.jdbc.Driver”);
+
+      EX:
+     ------
+          public class Student {
+	  public static void main (String [] args){
+		try {
+		Class.forName(“com.mysql.cj.jdbc.Driver”);
+                     }catch (ClassNotFoundException e){
+                    e.printStackTrace();
+                   }
+                 }
+               }
+      
+       
+      2.Establish the connection:
+        ----------------------------------
+	Get the connection :
+           ----------------------------------
+	        To get the connection we need a critical information about DBURL
+        
+        
+        DBURL:
+       --------------
+	DBURL is used to identify database present in RDBMS application
+        
+        Structure of DBURL:
+        -----------------------------
+         a.Host name 
+         b.Port name 
+         c.Database name 
+         d.User name and password 
+
+
+       PROTOCOL:
+      ---------------------
+	Protocol is a set of rule which helps to connect two application in our case java application with RDBMS application .
+	It is mandatory information about database URL.
+	The protocol is used is JDBC.
+ 
+
+   SUB-PROTOCOL:
+   ---------------------------
+     It is also a set of rules which gives inforation about database connectivity mechanism
+     It is mandatory information in the database URL
+     Sub-protocol depend on the RDBMS application used
+     The sub-protcol used is "mysql"
+
+  SUB-NAME:
+  -------------------
+     It will give physical location of RDBMS application
+
+     It consists of 4 parts:
+        
+     1) HOSTNAME:
+        ---------------------
+       
+            It uniquely identifies the computer where RDBMS application is installled, usually it will be IP address in our case we will use localhost since RDBMS AND java application are present in same system
+
+     2)PORT NUMBER:
+       -------------------------
+         It is used to identify each RDBMS application,portnumber differ from one application to another application
+
+     3)DATABASENAME/SCHEME NAME:
+      -----------------------------------------------------
+         It uniquely identofies database presen in RDBMS sever
+
+     4)CREDENTIALS:
+       --------------------------
+         Username & password
+         --------------------------------
+           DBURL eg: jdbc:mysql://localhost:8080/Databasename?user=root&password=root;
+
+
+   CREATE STATEMENT
+   ---------------------------------
+   CATEGORIZATION OF QUERY
+   ----------------------------------------------
+      1) Based on type when value will be given to Query
+          ---------------------------------------------------------------
+      i)Static Query
+           -------------
+                If the values are hardcoded and if there is no placeholders in a query it is called as static Query.
+        
+                Eg:
+              =====
+                  select * from emp;
+                  insert into emp values(1,tom)
+                  update emp set name='name' where 
+                  Delete from emp where id=1
+
+     ii)Dynamic Query
+        --------------
+         If the values for the query is given during the runtme is called as Dynamic Query
+         In dynamic query,we will set th values for placeholder during the execution of the program
+         
+         Eg:
+        ===
+          select * from emp where name=?
+          insert into emp values(?,?)
+          update emp set name=? where id=?
+          delete from emp where id=?;
+
+   STATEMENTS
+   -----------------------
+   Statement is used to carry our "Sql queries" from Java application to RDBMS application
+   We have 3 types of statements, all the statements are "interfaces"
+
+  eg:
+=====
+     java.sql.Statement ---> it is used to carry static query
+     java.sql.PreparedStatement --->  it is used to carry dynamic query
+     java.sql.CallableStatement --->  it is used to carry PL-SQL statement
+
+  EXECUTE QUERY
+ -----------------------------
+     Methods are used to execute our queries
+    ==============================
+     
+     1) public int executeUpdate(String sql) throws sql Exception ---> UPDATE,DELETE
+  
+     2) public ResultSet:
+        execute Query(String sql) throws sql Exception; -----> SELECT
+    
+  DYNAMIC
+  -----------------
+     
+    i)Since the query is dynamic we should use prepared statement interface
+
+    To use prepared Statement interface following method used is
+
+          ----> public java.sql.PreparedStatement 
+                preparedStatement(String sql) throws sqlException;
+     
+     ii) To give the values,during runtime,use settermethod present inside PrepareStatement Object
+          
+         public void setInt(int placeholder-index,int value)
+         public void setString(int placeholder-index,String value)
+         public void setDouble(int placeholder-index,Double value)
+         public void setLong(int placeholder-index,Long value)
+         public void setShort(int placeholder-index,Short value)
+
+
+  CODE TO EXECUTE QUERY
+  -------------------------------------------
+       PreparedStatement p= c.prepareStatement("insert into movie values(?,?,?,?,?)");
+
+           p.setString(1, movieName);
+           p.setString(2, hero);
+           p.setString(3, director);
+           p.setString(4, villan);
+           p.setString(5, heroine);
+
+  EXECUTING SELECT TYPE OF QUERY
+  ---------------------------------------------------------
+   Since the query is select type, use following method to execute
+
+             public ResultSet executeQuery (String sql) throws SqlException;
+  
+    The output of select type of query will be in the form of table and it will be given in the form of ResultSet Object
+
+    To fetch data from result set following operation has to be done
+    ---------------------------------------------------------------------------------
+     i) First check next data is present or not using following method 
+        public boolean next() throws sqlException
+
+     The above method returns TRUE, if the next records are present else it will return FALSE
+     If the records are present in the result set, get the data using getter method present inside resultSet Object
+              
+               Methods are as follows 
+              -------------------------
+                public int getInt(int column-Index);
+                public String getString(int column-Index);
+                public double getDouble(int column-Index);
+                public long getLong(int column-Index);
+
+       eg:
+      -----
+         
+         statement s=c.createStaement();
+
+         ResultSet rs= s.executeQuery("Select * from movie");
+         
+         while(rs.next()){
+            System.out.println("MovieName:"+ rs.getString(1));
+            System.out.println("HeroName:"+ rs.getString(2));
+            System.out.println("DirectorName:"+ rs.getString(3));
+            System.out.println("VillanName:"+ rs.getString(4));
+            System.out.println("HeroineName:"+ rs.getString(5));
+               }
+
+          NOTE:
+         -------
+             Column Index always starts from '1'
+             Column Index depend on Result of sql query
+                                 Column 1----> Select sal
+                                 Column 2----> ename from emp;
+
+   CLOSING CONNECTION
+  ---------------------------------------
+            To use the memory efficiently,we must close the connection 
+            To close the connection,following method is used  -----> void close() throws SQLException
+             
+           eg:
+           -----
+                      finally{                                                         
+                      try{                                                         |    NOTE:
+                      {                                                             | -------------    
+                      c.close(); --------------------------------------> |      Conncection can also be closed in the first try block ,but for our understanding we are making use of the finally block
+                     } catch (SQLEception e) {                        |                Because c.close() method will throw a SQLException
+                            e.printStackTrace();                           |
+                                  } 
+                                    }     
+         
+    EXECUTE BATCH
+    ---------------------------
+          It is used to execute multiple queries in single transaction
+    
+        BATCH PROCESSING METHODS
+        -------------------------
+            i) addBatch()
+            ------------------
+               It is used to add the batch.It can be used only for insert,update and delete type of queries
+            
+            SYNTAX:
+            ---------------
+
+             public void addBatch(String query) throws SQLExecption
+         
+            ii) executeBatch()
+               --------------------
+                   It is used to execute Batch
+               
+                    SYNTAX:
+                    --------------
+                       public int[ ] executeBatch() throws SQLException
+            
+            iii) clearBatch()
+                -----------------
+                     It is used to remove all statements from the batch
+                 
+                   SYNTAX:
+                   --------------
+                      public void clearBatch() throws SQLException
+
+  
+
+
+                        STEPS TO CREATE MAVEN PROJECT
+                       ----------------------------------------------------------
+
+     Click on File
+     Go for new File
+     Go for others
+     Search maven and choose maven project
+     Click on check box(Create simple project)
+     Give Group-id (aka package name) ,Artifact id (Project Name)
+     Click on Okay.
+
+ 
+      HOW TO UPDATE MAVEN PROJECT
+     ------------------------------------------------------
+
+      Right click on the project
+     Choose maven
+     Click on update project
+     Choose which project want to update
+     Click on the checkBox called as forced update ------> click on OKAY
+
+      HIBERNATE WITH JPA:
+     ----------------------------------
+
+           HIBERNATE
+        ---------------------
+
+        Hibernate is a Jva Framework that simplifies the development of Java Application
+        On to interact with the database. It is an open source,lightweight,ORM (Object Relational Mapping) tool.
+        Hibernate implements the specifications of JPA(Java Persistence API) for data persistence
+
+      ADVANTAGES OF HIBERNATE
+    -----------------------------------------------
+         Open Source and Lightweight
+         Fast Performance
+         Database INdependent Query
+         Automatic Table Creation
+        Simplifies Complex Join
+
+      HIBERNATE WITH JPA
+     ----------------------------------
+               Java Persistence API(JPA) is a Java Specification that provides certain functionality and standard to ORM tools. 
+               The javax.persistence package contains the JPA classes and interfaces.
+
+      ORM TOOL
+     --------------------
+              An ORM tool simplifies the data creation, data manipulation and data access. It is a programming technique that maps the object as one row in the table in the database.
+          
+                                ------------------------------                     ========                   ----------                                             ~~~~~~~~~~~
+                                | JAVA APPLICATION |  =======> / OBJECT |/  ======> | ORM |  ==================> \ DATABASE \
+                                ------------------------------                    =========                  -----------                                            ~~~~~~~~~~~~
+
+
+ ENTITY MANAGER :
+
+            •	Entity manager factory provides instance of Entity manager for connecting to same database . all the instances are configured to use the same setting as defined by the default implementation . Several entity manager factories can be prepared for connecting to different data base .
+            •	The Entity Manager inter face present in java.persistence is used to provide an entity  manager
+            •	Persistence – the Persistence is bootstarp class  which is used to obtain an Entity-Manager-Factory 
+
+            •	Entity manager is an interface provided by java persistence API specification 
+            •	Entity manager is used to manage the life cycle of Entity instance such as 
+                              Create and remove persistence entity instance 
+                              Find entity by the primary key 
+                              Query over entities 
+     SYNTAX:
+    ----------------
+
+             EntityManagerFactory emf= persistence .create EntityManagerFactory(“string”); //string =persistence unit name
+
+     Methods present in entity manager :
+    -----------------------------------------------
+                1. persist() - is used to save the instance .
+                2.  merge() - is used to merge the state of even entities given entities into the current persistence contact .
+                3. remove() - is used to remove the instance .
+                4. find() - is used to fetch the entities based on the primary key.
+
+     ENTITY TRANSACTION:
+    -------------------------------------
+                 It is an interface , it is used to control the transaction on resource local entity manager
+ 
+     Important methods :
+    -----------------------------
+
+              1.Begin() - it is used to start the transaction .
+              2.Commit () - it is used to save or commit the transaction .
+
+     JPQL - Java Persistence Query Language :
+    --------------------------------------------------------
+               JPQL stands for Java Persistence Query Language .
+               It is an platform independent object oriented query language .
+               JPQL is used to make queries against entity stored in relational database .
+               It is inspired by SQL .
+
+     NOTE:
+    -----------
+               In JPQL we work with Entities and collections of entities ,while in SQL we work with column and rows 
+
+     EX:
+    -------
+	SQL- Select * from table-name where name=?;
+	JPQL- Select alias-name from entity-class-name alias-name where alias.name=?;
+		Select e from Employee e where e.name=?;
+
+  TYPES OF QUERY PARAMETER
+ ------------------------------------------------
+           Similar to JDBC prepared statement parameters JPA specifies two different way of writing parameterized queries by using 
+   1.Positional parameter
+   2. Named parameter
+
+Difference between Perist and Merge method
+----------------------------------------------------------
+
+--------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                       PERSIST                                                                                                                                                  MERGE                                                                          
+--------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Persist should be called only on new entities                                                                                 |                Merge is meant to reattach detached entities
+
+It will persist the entity object in database                                                                                     |                  It will update the object in the databse for duplicate key
+
+If you pass the object with duplicate primary key it will throw exception                                        |                   If the primary key is not matched it will insert the object s new record in table.
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
